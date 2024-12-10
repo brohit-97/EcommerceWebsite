@@ -5,12 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Data
-public class Product {
+public class Product extends BaseModel{
 
-    private String name;
+    private String title;
     private String description;
     private double price;
     private Category category;
+    private String image;
     
 
 }

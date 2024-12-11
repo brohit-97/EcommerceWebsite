@@ -1,19 +1,21 @@
 package dev.rohit.productservice.services;
 
 import dev.rohit.productservice.dtos.GenericProductDto;
-import dev.rohit.productservice.models.Product;
+import dev.rohit.productservice.exceptions.NotFoundException;
+
+import java.util.List;
 
 public interface ProductService {
 
-    GenericProductDto getProductById(Long id);
+    GenericProductDto getProductById(Long id) throws NotFoundException;
 
-    void getProducts();
+    List<GenericProductDto> getProducts();
 
-    void createProduct();
+    GenericProductDto createProduct(GenericProductDto product);
 
     void updateProduct();
 
-    void deleteProduct();
+    GenericProductDto deleteProduct(Long id);
 
 
 }

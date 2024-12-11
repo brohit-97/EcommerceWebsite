@@ -3,6 +3,8 @@ package dev.rohit.productservice.services;
 import dev.rohit.productservice.dtos.GenericProductDto;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service("selfProductService")
 public class SelfProductServiceImpl implements ProductService{
     @Override
@@ -11,14 +13,15 @@ public class SelfProductServiceImpl implements ProductService{
     }
 
     @Override
-    public void getProducts() {
-
+    public List<GenericProductDto> getProducts() {
+        return null;
     }
 
     @Override
-    public void createProduct() {
-
+    public GenericProductDto createProduct(GenericProductDto product) {
+        return null;
     }
+
 
     @Override
     public void updateProduct() {
@@ -26,7 +29,7 @@ public class SelfProductServiceImpl implements ProductService{
     }
 
     @Override
-    public void deleteProduct() {
-
+    public GenericProductDto deleteProduct(Long id) {
+    return null;
     }
 }

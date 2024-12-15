@@ -4,8 +4,10 @@ import dev.rohit.paymentservice.dtos.OrderDto;
 import dev.rohit.paymentservice.exceptions.ServiceCallFailed;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+@Service
 public class OrderServiceClientImpl implements OrderServiceClient {
 
     private RestTemplate restTemplate;

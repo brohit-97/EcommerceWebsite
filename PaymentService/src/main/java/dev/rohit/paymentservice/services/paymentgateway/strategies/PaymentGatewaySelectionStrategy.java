@@ -9,8 +9,8 @@ import java.util.Random;
 
 @Service
 public class PaymentGatewaySelectionStrategy {
-    private RazorPayPaymentGateway razorPayPaymentGateway;
-    private StripePaymentGateway stripePaymentGateway;
+    private final RazorPayPaymentGateway razorPayPaymentGateway;
+    private final StripePaymentGateway stripePaymentGateway;
 
     public PaymentGatewaySelectionStrategy(RazorPayPaymentGateway razorPayPaymentGateway, StripePaymentGateway stripePaymentGateway) {
         this.razorPayPaymentGateway = razorPayPaymentGateway;

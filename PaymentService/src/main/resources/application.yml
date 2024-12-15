@@ -1,3 +1,5 @@
+server:
+  port: 8082
 spring:
   application:
     name: PaymentService
@@ -11,12 +13,10 @@ spring:
     password: ${POSTGRES_PASSWORD}
     url: ${POSTGRES_URL}
 security:
-  oauth2:
-    resourceserver:
-      jwt:
-        issuer-uri: ${OAUTH2_RESOURCE_SERVER_JWT_ISSUER}
-server:
-  port: 8082
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${OAUTH2_RESOURCE_SERVER_JWT_ISSUER}
 client:
   id: ${CLIENT_ID}
   secret: ${CLIENT_SECRET}
@@ -24,14 +24,16 @@ stripe:
   secret:
     key: ${STRIPE_SECRET_KEY}
 razorpay:
-  secret:
-    key: ${RAZORPAY_SECRET_KEY}
   key:
+    secret: ${RAZORPAY_SECRET_KEY}
     id: ${RAZORPAY_KEY_ID}
 kafka:
   bootstrap-servers: ${KAFKA_SERVER}
+email:
+  notification:
+    topic: "payment-email-notification"
 service:
-  order:
-    url: ${ORDER_SERVICE_URL}
-  user:
-    url: ${USER_SERVICE_URL}
+    order:
+      url: ${ORDER_SERVICE_URL}
+    user:
+      url: ${USER_SERVICE_URL}

@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: PaymentService
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    url: ${POSTGRES_URL}
+security:
+  oauth2:
+    resourceserver:
+      jwt:
+        issuer-uri: ${OAUTH2_RESOURCE_SERVER_JWT_ISSUER}
+server:
+  port: 8082
+client:
+  id: ${CLIENT_ID}
+  secret: ${CLIENT_SECRET}
+stripe:
+  secret:
+    key: ${STRIPE_SECRET_KEY}
+razorpay:
+  secret:
+    key: ${RAZORPAY_SECRET_KEY}
+  key:
+    id: ${RAZORPAY_KEY_ID}
+kafka:
+  bootstrap-servers: ${KAFKA_SERVER}
+service:
+  order:
+    url: ${ORDER_SERVICE_URL}
+  user:
+    url: ${USER_SERVICE_URL}

@@ -4,6 +4,8 @@ import dev.rohit.paymentservice.auth.JWTUtils;
 import dev.rohit.paymentservice.dtos.InitiatePaymentRequestDto;
 import dev.rohit.paymentservice.dtos.OrderDto;
 import dev.rohit.paymentservice.dtos.PaymentLinkResponseDto;
+import dev.rohit.paymentservice.dtos.PaymentResponseDto;
+import dev.rohit.paymentservice.exceptions.NotFoundException;
 import dev.rohit.paymentservice.exceptions.ServiceCallFailed;
 import dev.rohit.paymentservice.models.Payment;
 import dev.rohit.paymentservice.models.PaymentStatus;
@@ -14,6 +16,7 @@ import dev.rohit.paymentservice.services.paymentgateway.strategies.PaymentGatewa
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,24 +53,51 @@ public class PaymentService {
         return paymentRepository.save(payment);
     }
 
-    public List<Payment> getPayments() {
-        return paymentRepository.findAll();
+    public List<PaymentResponseDto> getAllPayments() {
+        List<Payment> payments =  paymentRepository.findAll();
+        List<PaymentResponseDto> paymentResponseDtos = new ArrayList<>();
+        // Convert list of payments to list of PaymentResponseDto
+        payments.forEach(payment -> {
+            paymentResponseDtos.add(PaymentResponseDto.buildFromPayment(payment));
+        });
+        return paymentResponseDtos;
     }
 
-    public Optional<Payment> getPayment(Long id) {
-        return paymentRepository.findById(id);
+    public PaymentResponseDto getPayment(Long id) {
+        Optional<Payment> payment = paymentRepository.findById(id);
+        if(payment.isPresent()) {
+            return PaymentResponseDto.buildFromPayment(payment.get());
+        }else{
+            throw new NotFoundException("Payment not found with id " + id);
+        }
     }
 
-    public Payment getByOrderId(Long orderId) {
-        return paymentRepository.findByOrderId(orderId);
+    public PaymentResponseDto getByOrderId(Long orderId) {
+        Optional<Payment> payment = paymentRepository.findByOrderId(orderId);
+        if (payment.isPresent()) {
+            return PaymentResponseDto.buildFromPayment(payment.get());
+        } else {
+            throw new NotFoundException("Payment not found with order id " + orderId);
+        }
+
     }
 
-    public Payment getByPaymentId(String paymentId) {
-        return paymentRepository.findByPaymentId(paymentId);
+    public PaymentResponseDto getByPaymentId(String paymentId) {
+        Optional<Payment> payment = paymentRepository.findByPaymentId(paymentId);
+        if (payment.isPresent()) {
+            return PaymentResponseDto.buildFromPayment(payment.get());
+        } else {
+            throw new NotFoundException("Payment not found with payment Id " + paymentId);
+        }
     }
 
-    public Payment getByPaymentLink(String paymentLink) {
-        return paymentRepository.findByPaymentLink(paymentLink);
+    public PaymentResponseDto getByPaymentLink(String paymentLink) {
+        Optional<Payment> payment = paymentRepository.findByPaymentLink(paymentLink);
+        if (payment.isPresent()) {
+            return PaymentResponseDto.buildFromPayment(payment.get());
+        } else {
+            throw new NotFoundException("Payment not found with payment link " + paymentLink);
+        }
     }
 
     private Payment buildPaymentObject(OrderDto order, PaymentLinkResponseDto paymentLinkResponseDto) {
@@ -79,6 +109,15 @@ public class PaymentService {
         payment.setPaymentId(paymentLinkResponseDto.getId());
         paymentRepository.save(payment);
         return payment;
+    }
+
+    public Payment getPaymentByPaymentLink(String paymentLink) {
+        Optional<Payment> payment = paymentRepository.findByPaymentLink(paymentLink);
+        if(payment.isPresent()) {
+            return payment.get();
+        }else{
+            throw new NotFoundException("Payment not found with payment link " + paymentLink);
+        }
     }
 
 }

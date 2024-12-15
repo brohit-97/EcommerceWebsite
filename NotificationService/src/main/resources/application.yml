@@ -10,6 +10,7 @@ spring:
         auto-offset-reset: earliest
         enable-auto-commit: true
 
+
   mail:
     host: ${MAIL_HOST}
     port: ${MAIL_PORT}
@@ -22,4 +23,7 @@ spring:
           auth: true
           starttls:
             enable: true
+
+topic:
+  email: payment-email-notification
 

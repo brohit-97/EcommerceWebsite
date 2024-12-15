@@ -11,6 +11,14 @@ public enum PaymentStatus {
     PROCESSING,
     DECLINED,
     TIMEOUT,
-    UNKNOWN
+    UNKNOWN;
 
+
+    public static PaymentStatus fromString(String status) {
+        try {
+            return PaymentStatus.valueOf(status.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return PaymentStatus.UNKNOWN;
+        }
+    }
 }

@@ -1,13 +1,19 @@
 package dev.rohit.paymentservice.services.paymentgateway;
 
 import com.razorpay.PaymentLink;
+import com.razorpay.RazorpayException;
 import dev.rohit.paymentservice.dtos.PaymentLinkResponseDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.json.JSONObject;
 import com.razorpay.RazorpayClient;
 
 @Service
 public class RazorPayPaymentGateway implements PaymentGateway {
+
+    @Value("${service.order.url}")
+    private String orderServiceUrl;
+
     private RazorpayClient razorpayClient;
 
     public RazorPayPaymentGateway(RazorpayClient razorpayClient) {
@@ -16,32 +22,26 @@ public class RazorPayPaymentGateway implements PaymentGateway {
 
 
     @Override
-    public PaymentLinkResponseDto generatePaymentLink(Long orderId, Long amount) {
+    public PaymentLinkResponseDto generatePaymentLink(Long orderId, Long amount) throws RazorpayException {
         JSONObject paymentLinkRequest = new JSONObject();
-        paymentLinkRequest.put("amount",1000);
-        paymentLinkRequest.put("currency","INR");
-        paymentLinkRequest.put("accept_partial",true);
-        paymentLinkRequest.put("first_min_partial_amount",100);
-        paymentLinkRequest.put("expire_by",1691097057);
-        paymentLinkRequest.put("reference_id","TS1989");
-        paymentLinkRequest.put("description","Payment for policy no #23456");
-        JSONObject customer = new JSONObject();
-        customer.put("name","+919000090000");
-        customer.put("contact","Gaurav Kumar");
-        customer.put("email","gaurav.kumar@example.com");
-        paymentLinkRequest.put("customer",customer);
+        paymentLinkRequest.put("amount",amount);
+        paymentLinkRequest.put("currency","USD");
+        paymentLinkRequest.put("accept_partial",false);
+        paymentLinkRequest.put("expire_by",System.currentTimeMillis() + 8640000);
+        paymentLinkRequest.put("reference_id",orderId);
+        paymentLinkRequest.put("description","Payment for Order -"+orderId);
         JSONObject notify = new JSONObject();
         notify.put("sms",true);
         notify.put("email",true);
         paymentLinkRequest.put("notify",notify);
         paymentLinkRequest.put("reminder_enable",true);
         JSONObject notes = new JSONObject();
-        notes.put("policy_name","Jeevan Bima");
+        notes.put("purchased",orderId);
         paymentLinkRequest.put("notes",notes);
-        paymentLinkRequest.put("callback_url","https://example-callback-url.com/");
+        paymentLinkRequest.put("callback_url",orderServiceUrl + "/confirm?orderId=" + orderId);
         paymentLinkRequest.put("callback_method","get");
-
         PaymentLink payment = razorpayClient.paymentLink.create(paymentLinkRequest);
-        return "https://razorpay.com/pay?orderId=" + orderId;
+        return new PaymentLinkResponseDto(payment.get("id"),payment.get("short_url"));
     }
+
 }

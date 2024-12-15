@@ -37,7 +37,7 @@ public class StripePaymentGateway implements PaymentGateway {
 
         // create price
         PriceCreateParams priceCreateParams = PriceCreateParams.builder()
-                .setCurrency("usd")
+                .setCurrency("USD")
                 .setProduct(product.getId())
                 .setUnitAmount(amount)
                 .build();

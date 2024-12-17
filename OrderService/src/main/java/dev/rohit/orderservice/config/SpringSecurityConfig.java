@@ -20,8 +20,7 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .authorizeHttpRequests(a -> a.requestMatchers("/webhooks/stripe").permitAll()
-                        .requestMatchers("/orders").permitAll()
+                .authorizeHttpRequests(a -> a.requestMatchers("/orders").permitAll()
                         .anyRequest().authenticated())
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)

@@ -6,7 +6,8 @@ public enum OrderStatus {
     CONFIRMED,
     SHIPPED,
     DELIVERED,
-    CANCELLED;
+    CANCELLED,
+    UNKNOWN;
 
     public static OrderStatus fromString(String status) {
         for (OrderStatus orderStatus : OrderStatus.values()) {
@@ -14,7 +15,7 @@ public enum OrderStatus {
                 return orderStatus;
             }
         }
-        return null;
+        return OrderStatus.UNKNOWN;
     }
 
 

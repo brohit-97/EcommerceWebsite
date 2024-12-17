@@ -2,12 +2,14 @@ package dev.rohit.orderservice.controllers;
 
 import dev.rohit.orderservice.dtos.OrderDto;
 
+import dev.rohit.orderservice.models.Order;
 import dev.rohit.orderservice.services.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/orders")
@@ -24,15 +26,27 @@ public class OrderController {
         return ResponseEntity.ok(OrderDto.from(orderService.createOrder(authentication)));
     }
 
-    @PostMapping("/cancel")
-    public void cancelOrder() {
-        orderService.cancelOrder();
+    @PostMapping("/cancel/{orderId}")
+    public ResponseEntity<OrderDto> cancelOrder(@PathVariable Long orderId) {
+        return ResponseEntity.ok(OrderDto.from(orderService.cancelOrder(orderId)));
     }
 
-    @PostMapping("/complete")
-    public void completeOrder() {
-        orderService.completeOrder();
+    @PostMapping("/complete/{orderId}")
+    public  ResponseEntity<OrderDto> completeOrder(@PathVariable Long orderId) {
+        return ResponseEntity.ok(OrderDto.from(orderService.completeOrder(orderId)));
     }
 
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderDto> getOrder(@PathVariable Long orderId) {
+        return ResponseEntity.ok(OrderDto.from(orderService.getOrder(orderId)));
+    }
+
+    @GetMapping("/customer")
+    public ResponseEntity<List<OrderDto>> getOrderForCustomer(Authentication authentication) {
+        List<Order> order =  orderService.getOrderForCustomer(authentication);
+        if(order == null || order.isEmpty())
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(order.stream().map(OrderDto::from).collect(Collectors.toList()));
+    }
 
 }

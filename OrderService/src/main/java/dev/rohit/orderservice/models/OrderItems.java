@@ -2,7 +2,9 @@ package dev.rohit.orderservice.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
+import lombok.Data;
 
+@Data
 @Entity
 public class OrderItems extends BaseModel {
 
@@ -22,36 +24,5 @@ public class OrderItems extends BaseModel {
         this.order = orderId;
     }
 
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public Order getOrderId() {
-        return order;
-    }
-
-    public void setOrderId(Order orderId) {
-        this.order = orderId;
-    }
 
 }

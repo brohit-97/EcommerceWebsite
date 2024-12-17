@@ -16,6 +16,7 @@ public class Order extends BaseModel{
     private Double orderTotal;
     private OrderStatus status;
     private Long paymentId;
+    private String shippingAddress;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItems> orderItems;
 

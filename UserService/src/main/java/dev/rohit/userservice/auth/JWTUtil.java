@@ -39,7 +39,7 @@ public class JWTUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    private boolean isTokenValid(String token, Long userId) {
+    public boolean isTokenValid(String token, Long userId) {
         final String tokenUserId = extractUserId(token);
         return (tokenUserId.equals(String.valueOf(userId))) && !isTokenExpired(token);
     }

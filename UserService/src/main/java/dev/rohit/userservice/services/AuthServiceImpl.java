@@ -4,7 +4,7 @@ import dev.rohit.userservice.auth.JWTUtil;
 import dev.rohit.userservice.dtos.UserDto;
 import dev.rohit.userservice.dtos.UserLoginResponseDto;
 import dev.rohit.userservice.dtos.UserRegisterRequestDto;
-import dev.rohit.userservice.dtos.ValidateUserTokenResponseDto;
+import dev.rohit.userservice.dtos.AuthTokenResponseDto;
 import dev.rohit.userservice.exceptions.InvalidPasswordException;
 import dev.rohit.userservice.exceptions.NotFoundException;
 import dev.rohit.userservice.exceptions.ResourceAlreayExistException;
@@ -102,27 +102,27 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ValidateUserTokenResponseDto validateUserToken(Long userId, String token) {
+    public AuthTokenResponseDto validateUserToken(Long userId, String token) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
-        ValidateUserTokenResponseDto validateUserTokenResponseDto = new ValidateUserTokenResponseDto();
-        validateUserTokenResponseDto.setUserDto(UserDto.fromUser(user));
+        AuthTokenResponseDto authTokenResponseDto = new AuthTokenResponseDto();
+        authTokenResponseDto.setUserDto(UserDto.fromUser(user));
 
         if(!jwtUtil.isTokenValid(token, userId)) {
-            validateUserTokenResponseDto.setSessionStatus(SessionStatus.INVALID);
-            return validateUserTokenResponseDto;
+            authTokenResponseDto.setSessionStatus(SessionStatus.INVALID);
+            return authTokenResponseDto;
         }
 
         Optional<Session> sessionOptional = sessionRepository.findByUserIdAndToken(userId, token);
         if(sessionOptional.isPresent()) {
             Session session = sessionOptional.get();
             if(!session.getSessionStatus().equals(SessionStatus.ACTIVE)) {
-                validateUserTokenResponseDto.setSessionStatus(SessionStatus.EXPIRED);
+                authTokenResponseDto.setSessionStatus(SessionStatus.EXPIRED);
             } else {
-                validateUserTokenResponseDto.setSessionStatus(SessionStatus.INVALID);
+                authTokenResponseDto.setSessionStatus(SessionStatus.INVALID);
             }
-            return validateUserTokenResponseDto;
+            return authTokenResponseDto;
         }
-        validateUserTokenResponseDto.setSessionStatus(SessionStatus.ACTIVE);
-        return validateUserTokenResponseDto;
+        authTokenResponseDto.setSessionStatus(SessionStatus.ACTIVE);
+        return authTokenResponseDto;
     }
 }

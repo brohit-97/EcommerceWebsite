@@ -1,9 +1,8 @@
 package dev.rohit.userservice.services;
 
-import dev.rohit.userservice.dtos.UserDto;
 import dev.rohit.userservice.dtos.UserLoginResponseDto;
 import dev.rohit.userservice.dtos.UserRegisterRequestDto;
-import dev.rohit.userservice.dtos.ValidateUserTokenResponseDto;
+import dev.rohit.userservice.dtos.AuthTokenResponseDto;
 import dev.rohit.userservice.models.User;
 import org.springframework.http.ResponseEntity;
 
@@ -19,5 +18,5 @@ public interface AuthService {
 
     User assignRoles(Long userId, Set<Long> roleIds);
 
-    ValidateUserTokenResponseDto validateUserToken(Long userId, String token);
+    AuthTokenResponseDto validateUserToken(Long userId, String token);
 }

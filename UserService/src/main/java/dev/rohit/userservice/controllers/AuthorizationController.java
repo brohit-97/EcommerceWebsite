@@ -3,7 +3,6 @@ package dev.rohit.userservice.controllers;
 import dev.rohit.userservice.dtos.*;
 import dev.rohit.userservice.services.AuthService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -33,7 +32,7 @@ public class AuthorizationController {
     }
 
     @PostMapping("/validate")
-    public ResponseEntity<ValidateUserTokenResponseDto> validate(@RequestBody ValidateUserTokenRequestDto validateUserTokenRequestDto) {
-       return ResponseEntity.ok(authService.validateUserToken(validateUserTokenRequestDto.getUserId(), validateUserTokenRequestDto.getToken()));
+    public ResponseEntity<AuthTokenResponseDto> validate(@RequestBody AuthTokenRequestDto authTokenRequestDto) {
+       return ResponseEntity.ok(authService.validateUserToken(authTokenRequestDto.getUserId(), authTokenRequestDto.getToken()));
     }
 }

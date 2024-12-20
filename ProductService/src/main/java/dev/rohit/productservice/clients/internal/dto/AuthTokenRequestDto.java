@@ -1,18 +1,13 @@
-package dev.rohit.userservice.dtos;
+package dev.rohit.productservice.clients.internal.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
-public class ValidateUserTokenRequestDto {
+public class AuthTokenRequestDto {
     private String token;
     private Long userId;
 
-    public ValidateUserTokenRequestDto() {
+    public AuthTokenRequestDto() {
     }
 
-    public ValidateUserTokenRequestDto(String token, Long userId) {
+    public AuthTokenRequestDto(String token, Long userId) {
         this.token = token;
         this.userId = userId;
     }

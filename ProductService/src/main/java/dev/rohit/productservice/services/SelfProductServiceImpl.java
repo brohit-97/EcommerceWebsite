@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -24,6 +25,7 @@ public class SelfProductServiceImpl implements ProductService{
     private ProductRepository productRepository;
     private ESProductRepository esProductRepository;
     private CategoryService categoryService;
+    private RedisTemplate<String, Object> redisTemplate;
 
     public SelfProductServiceImpl(ProductRepository productRepository, ESProductRepository esProductRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
@@ -34,6 +36,22 @@ public class SelfProductServiceImpl implements ProductService{
 
     @Override
     public Optional<Product> getProductById(Long id) {
+        ProductResponseDto responseDto = (ProductResponseDto)redisTemplate.opsForHash().get("PRODUCTS", productId);
+        if(responseDto!=null){
+            return Optional.of(responseDto.toProduct());
+        }
+        // Query the repository fetch the product
+        Optional<Product> productOptional = productRepository.findById(productId);
+
+        if(productOptional.isPresent()){
+            redisTemplate.opsForHash().put("PRODUCTS", productId, ProductResponseDto.fromProduct(productOptional.get()));
+        }
+
+        Optional<Product> optionalProduct = (Optional<Product>) redisTemplate.opsForValue().get(id);
+        if(optionalProduct == null){
+            throw new NotFoundException("Product not found");
+        }
+        redisTemplate.opsForHash().put("product", id, optionalProduct.get());
         return productRepository.findById(id);
     }
 

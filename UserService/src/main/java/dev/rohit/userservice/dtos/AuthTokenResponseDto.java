@@ -4,7 +4,7 @@ import dev.rohit.userservice.models.SessionStatus;
 import lombok.Data;
 
 @Data
-public class ValidateUserTokenResponseDto {
+public class AuthTokenResponseDto {
     UserDto userDto;
     SessionStatus sessionStatus;
 }

@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: ProductService
+  datasource:
+    url: {POSTGRES_DB_URL}
+    username: productDbUser
+    password: PASSWORD
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+
+server:
+  port: 8081
+  error:
+    include-stacktrace: never
+
+auth:
+  service:
+    url: {AUTH_SERVICE_URL}
+
+fakestore:
+    api:
+        url: {FAKE_STORE_SERVICE_URL}
+
+logging:
+    level:
+        org:
+        springframework:
+            web: DEBUG
